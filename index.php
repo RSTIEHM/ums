@@ -72,6 +72,8 @@
             <h1 class="text-center font-weight-bold text-primary">Create Account</h1>
             <hr class="my-3" />
             <form action="#" method="post" class="px-3" id="register-form">
+              <div id="regAlert">
+              </div>
               <div class="input-group input-group-lg form-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
@@ -176,14 +178,18 @@
               method: "post",
               data: $("#register-form").serialize() + '&action=register',
               success: function(response) {
-                $("#register-btn").val("Sign Up");
-                console.log(response)
+                $("#register-btn").val("Sign Up")
+                if (response === "register") {
+                  window.location = "home.php";
+                } else {
+                  $("#regAlert").html(response);
+                }
               }
-            })
+            });
           }
         }
       })
-    })
+    });
   </script>
 </body>
 
