@@ -22,6 +22,7 @@
             <h1 class="text-center font-weight-bold text-primary">Sign in to Account</h1>
             <hr class="my-3" />
             <form action="#" method="post" class="px-3" id="login-form">
+              <div id="loginAlert"></div>
               <div class="input-group input-group-lg form-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
@@ -163,7 +164,7 @@
         $("#forgot-box").hide();
       });
 
-      // REGISTER USER 
+      // REGISTER USER =================================
       $("#register-btn").click(function(e) {
         if ($("#register-form")[0].checkValidity()) {
           e.preventDefault();
@@ -187,6 +188,28 @@
               }
             });
           }
+        }
+      })
+
+      // login ajax
+      $("#login-btn").click(function(e) {
+        if ($("#login-form")[0].checkValidity()) {
+          e.preventDefault();
+          $("#login-btn").val("Please Wait...")
+          $.ajax({
+            url: "assets/php/action.php",
+            method: 'post',
+            data: $("#login-form").serialize() + '&action=login',
+            success: function(response) {
+              $("#login-btn").val("Log In")
+              if (response === "login") {
+                $("#login-btn").val("Sign In")
+                window.location = "home.php";
+              } else {
+                $('#loginAlert').html(response);
+              }
+            }
+          })
         }
       })
     });

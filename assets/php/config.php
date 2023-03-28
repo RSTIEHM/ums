@@ -1,7 +1,7 @@
 <?php 
 
  class Database {
-  private $dbh = "mysql:host=localhost;dbname=ums";
+  private $dbh = "mysql:host=localhost;dbname=db_ums";
   private $dbuser = "root";
   private $dbpass = "";
 
