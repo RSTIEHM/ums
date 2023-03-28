@@ -1,3 +1,11 @@
+<?php
+session_start();
+// USER LOGGED IN SEND TO HOME PAGE
+if (isset($_SESSION["user"])) {
+  header("location: home.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,17 +35,27 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
                 </div>
-                <input type="email" id="email" name="email" class="form-control rounded-0" placeholder="E-Mail" required />
+                <input value="<?php
+                              if (isset($_COOKIE["email"])) {
+                                echo $_COOKIE["email"];
+                              }
+                              ?>" type="email" id="email" name="email" class="form-control rounded-0" placeholder="E-Mail" required />
               </div>
               <div class="input-group input-group-lg form-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text rounded-0"><i class="fas fa-key fa-lg fa-fw"></i></span>
                 </div>
-                <input type="password" id="password" name="password" class="form-control rounded-0" minlength="5" placeholder="Password" required autocomplete="off" />
+                <input value="<?php
+                              if (isset($_COOKIE["password"])) {
+                                echo $_COOKIE["password"];
+                              }
+                              ?>" type="password" id="password" name="password" class="form-control rounded-0" minlength="5" placeholder="Password" required autocomplete="off" />
               </div>
               <div class="form-group clearfix">
                 <div class="custom-control custom-checkbox float-left">
-                  <input type="checkbox" class="custom-control-input" id="customCheck" name="rem" />
+                  <input <?php
+                          if (isset($_COOKIE["email"])) { ?> checked <?php }
+                                                            ?> type="checkbox" class="custom-control-input" id="customCheck" name="rem" />
                   <label class="custom-control-label" for="customCheck">Remember me</label>
                 </div>
                 <div class="forgot float-right">

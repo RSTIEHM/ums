@@ -6,9 +6,6 @@ class Auth extends Database {
 
   // REGISTER NEW USER 
   public function register($name, $email, $password) {
-    // $name = "Jason";
-    // $email = "voorhees@email.com";
-    // $password = "1234567";
     $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
     $stmt =  $this->conn->prepare($sql);
     $stmt->bindParam("name", $name);
@@ -34,6 +31,17 @@ class Auth extends Database {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row;
   }
+
+  // CURRENT USER SESSION
+  public function currentUser($email) {
+    $sql = "SELECT * FROM users WHERE email = :email AND deleted != 0";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam("email", $email);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row;
+  }
+  
 }
 
 

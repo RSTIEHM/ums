@@ -35,15 +35,29 @@ if (isset($_POST["action"]) && $_POST["action"] == "login") {
 
   $loggedInUser = $user->login($email);
   if($loggedInUser != null) {
+    // USER FOUND ==================
     if(password_verify($password, $loggedInUser["password"])) {
+      // USER WITH PASSWORD VERIFIED =============
       if(!empty($_POST["rem"])) {
         setcookie("email", $email, time() + (30*24*60*60), "/");
         setcookie("password", $password, time() + (30 * 24 * 60 * 60), "/");
       } else {
-        
+        setcookie("email", "", 1, "/");
+        setcookie("password", "", 1, "/");   
       }
+      echo "login";
+      $_SESSION["user"] = $email;
     }
+    else {
+      // WRONG PASSWORD ===================================
+      echo $user->showMessage("danger", "Password is wrong");
+    } 
   } 
+  else {
+    // NO USER ===================================
+    echo $user->showMessage("danger", "No User Found");
+  }
+
 }
 
 
