@@ -55,7 +55,7 @@ if (isset($_SESSION["user"])) {
                 <div class="custom-control custom-checkbox float-left">
                   <input <?php
                           if (isset($_COOKIE["email"])) { ?> checked <?php }
-                                                            ?> type="checkbox" class="custom-control-input" id="customCheck" name="rem" />
+                                                                      ?> type="checkbox" class="custom-control-input" id="customCheck" name="rem" />
                   <label class="custom-control-label" for="customCheck">Remember me</label>
                 </div>
                 <div class="forgot float-right">
@@ -209,7 +209,7 @@ if (isset($_SESSION["user"])) {
         }
       })
 
-      // login ajax
+      // login ajax ====================================
       $("#login-btn").click(function(e) {
         if ($("#login-form")[0].checkValidity()) {
           e.preventDefault();
@@ -226,6 +226,24 @@ if (isset($_SESSION["user"])) {
               } else {
                 $('#loginAlert').html(response);
               }
+            }
+          })
+        }
+      })
+
+      // FORGOT PASSWORD AJAX ========================
+      $("#forgot-btn").click(function(e) {
+        if ($("#forgot-form")[0].checkValidity()) {
+          e.preventDefault()
+          $("#forgot-btn").val("Pleaase Wait....")
+          $.ajax({
+            url: "assets/php/action.php",
+            method: "post",
+            data: $("#forgot-form").serialize() + '&action=forgot',
+            success: function(response) {
+              $("#forgot-btn").val("Reset password")
+              $("#forgot-form")[0].reset()
+              $("#forgotAlert").html(response)
             }
           })
         }

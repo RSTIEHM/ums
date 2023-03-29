@@ -1,5 +1,13 @@
 <?php 
 session_start();
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
+$mail = new PHPMailer(true);
+
 require_once "auth.php";
 $user = new Auth();
 
@@ -7,7 +15,6 @@ $user = new Auth();
 // HANDLE AJAX REGISTER ========================================  
 if(isset($_POST["action"]) && $_POST["action"] == "register") {
 
-  // =====================================================
   $name = $user->test_input($_POST['name']);
   $email = $user->test_input($_POST['email']);
   $password = $user->test_input($_POST['password']);
@@ -24,8 +31,6 @@ if(isset($_POST["action"]) && $_POST["action"] == "register") {
       echo $user->showMessage("danger", "Something Went Wrong! Try again in a bit");
     }
   }
-
-
 }
 
 // HANDLE AJAX Login ========================================  
@@ -57,8 +62,35 @@ if (isset($_POST["action"]) && $_POST["action"] == "login") {
     // NO USER ===================================
     echo $user->showMessage("danger", "No User Found");
   }
-
 }
 
+// HANDLE FORGOT PASSWORD ======================================== 
+if (isset($_POST["action"]) && $_POST["action"] == "forgot") {
+  $email = $user->test_input($_POST["email"]);
+  $user_found = $user->currentUser($email);
+  if($user_found != null) {
+    $token = uniqid();
+    $token = str_shuffle($token);
+    $user->forgot_password($token,$email);
+    try {
+      $mail->isSMTP();
+      $mail->Host = "smtp.gmail.com";
+      $mail->SMTPAuth = true;
+      $mail->Username = "";
+      $mail->Password = "";
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+      $mail->port = 587;
+      $mail->setFrom("email@gmail.com", "RJS");
+      $mail->addAddress($email);
+      $mail->isHTML(true);
+      $mail->subject("RESET");
+      $mail->Body("<h3>Hey</h3>");
+      $mail->send();
+      echo $user->showMessage("success", "Mail Sent");
+    } catch() {
+      echo $user->showMessage("danger", "Problem");
+    }
+  }
+}
 
 ?>
